@@ -50,7 +50,7 @@ body {
     font-size: 12px;
 }
 
-a, a:focus, a:visited, a:hover {
+#source a, #source a:focus, #source a:visited, #source a:hover {
     color: var(--orange);
     outline: 0;
     text-decoration: none;
