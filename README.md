@@ -54,19 +54,16 @@ package through `setup.py`.
     $ sudo python3 setup.py install --install-scripts=/usr/local/bin
 
 This will install the `mdpreview` package along with resources and
-the `mdpreviewd.service` systemd unit.
+the `mdpreviewd.service` systemd user unit.
 
-Change `MD_USER` to the user who uses vim:
+Reload the service so it's ready to go.
 
-    $ SERVICE=/etc/systemd/system/mdpreviewd.service
-    $ sudo sed -i 's;MD_USER=kevr;MD_USER=<your_user>;' $SERVICE
-
-Reload the service if needed and start it.
-
-    $ sudo systemctl daemon-reload mdpreviewd
-    $ sudo systemctl start mdpreviewd
+    $ systemctl --user daemon-reload mdpreviewd
 
 Put the ftplugin script in your `~/.vim`:
 
     $ mkdir -p ~/.vim/after/ftplugin
     $ cp .vim/after/ftplugin/markdown.vim ~/.vim/after/ftplugin/
+
+Now, opening a markdown file in vim will launch the `mdpreviewd`
+service.

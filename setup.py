@@ -24,7 +24,7 @@ if os.path.isdir(static):
     shutil.rmtree(static)
 shutil.copytree("static", static)
 
-service = "/etc/systemd/system/mdpreviewd.service"
+service = "/etc/systemd/user/mdpreviewd.service"
 if os.path.exists(service):
     os.remove(service)
 shutil.copyfile("systemd/mdpreviewd.service", service)

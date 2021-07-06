@@ -1,14 +1,9 @@
 #!/bin/bash
 
-if [ -z "$MD_USER" ]; then
-    echo "error: \$MD_USER is required (the user editing MDs)."
-    exit 1
-fi
-
 TMPFILE=/tmp/mdpreview.md
 if [ ! -f $TMPFILE ]; then
     echo '# ...Waiting for markdown.' > $TMPFILE
-    chown $MD_USER:$MD_USER $TMPFILE
+    chown $USER:$USER $TMPFILE
 fi
 
 [[ -z "$PORT" ]] && PORT=13337

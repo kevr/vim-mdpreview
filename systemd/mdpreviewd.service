@@ -1,14 +1,10 @@
 [Unit]
 Description=VIM Markdown Preview HTTP server
-After=network.target
 
 [Service]
-Environment=MD_USER=kevr
 Environment=PORT=13337
-Type=simple
 ExecStart=/usr/local/bin/mdpreviewd
-Restart=always
 TimeoutSec=3
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
