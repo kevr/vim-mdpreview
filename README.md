@@ -28,6 +28,7 @@ All dependencies are public and available via `pip`.
 | asgiref                |
 | uvloop                 |
 | httptools              |
+| jinja2                 |
 
 </td><td>
 

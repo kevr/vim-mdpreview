@@ -5,3 +5,4 @@ uvicorn
 asgiref
 uvloop
 httptools
+jinja2
