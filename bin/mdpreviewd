@@ -1,10 +1,11 @@
 #!/bin/bash
 
+source $HOME/.mdpreviewrc
+
 TMPFILE=/tmp/mdpreview.md
 if [ ! -f $TMPFILE ]; then
     echo '# ...Waiting for markdown.' > $TMPFILE
-    chown $USER:$USER $TMPFILE
 fi
 
 [[ -z "$PORT" ]] && PORT=13337
-exec /usr/bin/uvicorn --port $PORT mdpreview.asgi:app
+exec uvicorn --port $PORT mdpreview.asgi:app
