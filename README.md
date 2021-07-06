@@ -67,6 +67,16 @@ Last but not least, put the ftplugin script in your `~/.vim`:
 Now, opening a markdown file in vim will launch the `mdpreviewd`
 service and writing one will update the preview.
 
+## Configuration
+
+There's just one configuration located at
+[example/mdpreviewrc](example/mdpreviewrc) which contains specific `PATH`
+and `PORT` environment variables used by the `mdpreviewd` systemd service.
+
+Before the service can successfully start,
+[example/mdpreviewrc](example/mdpreviewrc) must be located at
+`$HOME/.mdpreviewrc`.
+
 ## License
 
 This project operates under the [MIT](LICENSE) Public License.
