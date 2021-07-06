@@ -18,7 +18,7 @@
                 let content = document.getElementById("content");
                 content.innerHTML = marked(text);
             }
-            setMarkdown("{{ markdown | replace('\n', '\\n') }}");
+            setMarkdown("{{ markdown | replace('\\', '\\\\') | replace('\n', '\\n') }}");
         </script>
         <script type="text/javascript" src="/static/js/websocket.js"></script>
 

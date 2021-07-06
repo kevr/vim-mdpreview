@@ -8,6 +8,9 @@ in a browser as they save markdown files in vim.
 - `:MarkdownPreview`
     - Open the markdown preview in `$BROWSER`.
 
+`:MarkdownPreview` requires that the `mdpreviewd` service is
+running. See [Installation](#installation) for details.
+
 ## Dependencies
 
 These dependencies must be installed globally in the Python
@@ -39,7 +42,7 @@ installation used to run the server.
 
 On `Ubuntu`, on can install deps via:
 
-    $ sudo apt-get -y install python3-aiofiles python3-pip \\
+    $ sudo apt-get -y install python3-aiofiles python3-pip \ 
         python3-websockets python3-uvloop python3-httptools
     $ sudo /usr/bin/pip3 install fastapi
 
@@ -67,9 +70,3 @@ Put the ftplugin script in your `~/.vim`:
 
     $ mkdir -p ~/.vim/after/ftplugin
     $ cp .vim/after/ftplugin/markdown.vim ~/.vim/after/ftplugin/
-
-## Workflow
-
-`mdpreview` uses a backend HTTP server, launched by `mdpreviewd`. Users
-can launch a preview session in `$BROWSER` by executing `:MarkdownPreview`
-in vim.
