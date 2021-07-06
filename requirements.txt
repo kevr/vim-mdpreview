@@ -1,0 +1,7 @@
+fastapi
+aiofiles
+websockets
+uvicorn
+asgiref
+uvloop
+httptools
