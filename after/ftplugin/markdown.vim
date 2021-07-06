@@ -25,4 +25,4 @@ autocmd BufWritePost * :call system(
 " Spawn a preview browser tab using $BROWSER.
 " g:mdpreview_port configures the port used (default: '13337').
 command MarkdownPreview call system(
-    \ "bash -c '$BROWSER http://localhost:" . get(g:, 'mdpreview_port') . "'")
+    \ "bash -c '$BROWSER http://localhost:" . get(g:, 'mdpreview_port') . " >/dev/null 2>&1 &'")
