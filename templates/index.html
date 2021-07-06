@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/static/css/github-markdown.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="/static/css/style.css">
+
+        <title>VIM Markdown Preview</title>
+    </head>
+
+    <body>
+        <article id="content" class="markdown-body"></article>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+            function setMarkdown(text) {
+                let content = document.getElementById("content");
+                content.innerHTML = marked(text);
+            }
+            setMarkdown("{{ markdown | replace('\n', '\\n') }}");
+        </script>
+        <script type="text/javascript" src="/static/js/websocket.js"></script>
+
+        {% set repo = "kevr/vim-mdpreview" %}
+        {% set source_url = "https://www.github.com/" + repo %}
+        <div id="source">
+            <span class="small">VIM Markdown Preview</span>
+            <span class="small">•</span>
+            <span class="small">Source hosted at
+                <a href="{{ source_url }}" target="_blank">
+                    {{ repo }}
+                </a>
+            </span>
+        </div>
+    </body>
+</html>

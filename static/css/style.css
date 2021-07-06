@@ -1,0 +1,62 @@
+:root {
+    --body-background: rgba(0, 0, 0, 0.02);
+    --content-background: #fafafa;
+    --shaded: rgba(0, 0, 0, 0.04);
+    --grey: #858585;
+    --orange: #d64e2f;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, span, li {
+    font-family: "Roboto", sans-serif !important;
+}
+
+body {
+    background-color: var(--body-background);
+}
+
+#content {
+    background-color: var(--content-background);
+    padding: 10px 20px;
+    border-radius: 2px;
+    margin: 0 auto;
+    max-width: 920px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (min-width: 880px) {
+    #content {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #content {
+        width: 70%;
+    }
+}
+@media screen and (min-width: 1400px) {
+    #content {
+        width: 60%;
+    }
+}
+
+#source {
+    padding: 10px 0;
+    text-align: center;
+    color: var(--grey);
+}
+
+.small {
+    font-size: 12px;
+}
+
+a, a:focus, a:visited, a:hover {
+    color: var(--orange);
+    outline: 0;
+    text-decoration: none;
+}
+
+code {
+    font-size: 14px;
+    color: var(--orange);
+}
