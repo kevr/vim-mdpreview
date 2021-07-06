@@ -13,8 +13,7 @@ running. See [Installation](#installation) for details.
 
 ## Dependencies
 
-These dependencies must be installed globally in the Python
-installation used to run the server.
+All dependencies are public and available via `pip`.
 
 <table>
 <tr><th>Dependencies</th><th>Integrations</th></tr>
@@ -40,30 +39,39 @@ installation used to run the server.
 </td></tr>
 </table>
 
-On `Ubuntu`, on can install deps via:
-
-    $ sudo apt-get -y install python3-aiofiles python3-pip \ 
-        python3-websockets python3-uvloop python3-httptools
-    $ sudo /usr/bin/pip3 install fastapi
-
 ## Installation
 
+### With `vim-plug`
+
+    Plug 'kevr/vim-mdpreview', { 'do': './install.sh' }
+
+<small>**NOTE:** The `vim-plug` method installs `mdpreview` packages
+and binaries to `$HOME/.local`</small>
+
+### With `pip`
+
 To install `vim-mdpreview`, you must install the `mdpreview` Python
-package through `setup.py`.
+package through `setup.py` or via `pip[3]` (including dependencies).
 
-    $ sudo python3 setup.py install --install-scripts=/usr/local/bin
+    $ /usr/bin/pip3 install --user -r requirements.txt .
 
-This will install the `mdpreview` package along with resources and
-the `mdpreviewd.service` systemd user unit.
+<small>**Note:** Pay attention to use your system `python3` binary to
+avoid any virtualenv issues.</small>
 
-Reload the service so it's ready to go.
-
-    $ systemctl --user daemon-reload mdpreviewd
-
-Put the ftplugin script in your `~/.vim`:
+Last but not least, put the ftplugin script in your `~/.vim`:
 
     $ mkdir -p ~/.vim/after/ftplugin
-    $ cp .vim/after/ftplugin/markdown.vim ~/.vim/after/ftplugin/
+    $ cp after/ftplugin/markdown.vim ~/.vim/after/ftplugin/
 
 Now, opening a markdown file in vim will launch the `mdpreviewd`
-service.
+service and writing one will update the preview.
+
+## License
+
+This project operates under the [MIT](LICENSE) Public License.
+
+## Authors
+
+| Name         | Email          |
+|--------------|----------------|
+| Kevin Morris | kevr@0cost.org |
