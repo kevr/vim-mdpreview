@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import os
-
 from http import HTTPStatus
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
@@ -10,9 +9,9 @@ from fastapi.staticfiles import StaticFiles
 from websockets.exceptions import ConnectionClosedOK
 
 from mdpreview.templates import render_template
+from mdpreview.util import share
 
-curdir = os.path.dirname(__file__)
-rootdir = '/'.join([curdir, ".."])
+static = os.path.join(share, "static")
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
@@ -23,8 +22,7 @@ running = True
 @app.on_event("startup")
 async def app_startup():
     global running
-    static_dir = "/usr/share/mdpreview/static"
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    app.mount("/static", StaticFiles(directory=static), name="static")
     running = True
 
 

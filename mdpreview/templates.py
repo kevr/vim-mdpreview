@@ -1,11 +1,14 @@
+import os
+
 import jinja2
 
-# ../templates/
-path = "/usr/share/mdpreview/templates"
+from mdpreview.util import share
 
-env = jinja2.Environment(loader=jinja2.FileSystemLoader(path))
+templates = os.path.join(share, "templates")
+
+env = jinja2.Environment(loader=jinja2.FileSystemLoader(templates))
 
 
 def render_template(path: str, **context):
-    template_ = env.get_template(path)
-    return template_.render(**context)
+    template = env.get_template(path)
+    return template.render(**context)

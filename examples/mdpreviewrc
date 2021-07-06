@@ -1,0 +1,9 @@
+# Use this file to configure mdpreview-specific environment
+# variables which are to be sourced in the systemd user service.
+
+# Include $project/bin and $home/.local/bin in $PATH.
+PATH="${HOME}/.local/bin:${PATH}"
+
+# Listen on port 13337.
+# In vim, let g:mdpreview_port = 13337.
+PORT=13337

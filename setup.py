@@ -12,19 +12,27 @@ setup(name="mdpreview",
       packages=['mdpreview'],
       scripts=['bin/mdpreviewd'])
 
-share = "/usr/share/mdpreview"
-os.system(f"mkdir -p {share}")
+home = os.environ.get("HOME")
+
+share = os.path.join(home, ".local", "share", "mdpreview")
+if os.path.isdir(share):
+    shutil.rmtree(share)
+os.makedirs(share)
+
 templates = os.path.join(share, "templates")
-if os.path.isdir(templates):
-    shutil.rmtree(templates)
 shutil.copytree("templates", templates)
 
 static = os.path.join(share, "static")
-if os.path.isdir(static):
-    shutil.rmtree(static)
 shutil.copytree("static", static)
 
-service = "/etc/systemd/user/mdpreviewd.service"
+systemd_path = os.path.join(home, ".config", "systemd", "user")
+if not os.path.exists(systemd_path):
+    os.makedirs(systemd_path)
+
+service = os.path.join(systemd_path, "mdpreviewd.service")
 if os.path.exists(service):
     os.remove(service)
 shutil.copyfile("systemd/mdpreviewd.service", service)
+
+# Reload user services.
+os.system("systemctl --user daemon-reload")
