@@ -54,7 +54,7 @@ and binaries to `$HOME/.local`</small>
 To install `vim-mdpreview`, you must install the `mdpreview` Python
 package through `setup.py` or via `pip[3]` (including dependencies).
 
-    $ /usr/bin/pip3 install --user -r requirements.txt .
+    $ /usr/bin/pip3 install --user -I -r requirements.txt .
 
 <small>**Note:** Pay attention to use your system `python3` binary to
 avoid any virtualenv issues.</small>
