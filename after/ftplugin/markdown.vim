@@ -19,7 +19,7 @@ endif
 " After writing a file, copy it to /tmp/mdpreview.md.
 " This is then detected by mdpreviewd and triggers a websocket
 " load via Javascript on the rendered markdown page.
-autocmd BufWritePost markdown :call system(
+autocmd BufWritePost *.md :call system(
     \ "cp " . expand("%") . " /tmp/mdpreview.md")
 
 " Spawn a preview browser tab using $BROWSER.
