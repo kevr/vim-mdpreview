@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import logging
 import os
 from http import HTTPStatus
@@ -11,10 +12,14 @@ from websockets.exceptions import ConnectionClosedOK
 from mdpreview.templates import render_template
 from mdpreview.util import share
 
+PATH = "/tmp/mdpreview.md".encode()
+
 static = os.path.join(share, "static")
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
+
+cache_hash = ''
 
 running = True
 
@@ -50,22 +55,20 @@ async def markdown(request: Request):
     return HTMLResponse(template)
 
 
+def get_hash():
+    with open(PATH, "rb") as f:
+        md5 = hashlib.md5()
+        md5.update(f.read())
+        return md5.hexdigest()
+
+
 def update_cache():
-    path = "/tmp/mdpreview.md"
-    cache_path = "/tmp/mdpreview.md.cache"
-    with open(path) as original:
-        with open(cache_path, "w") as cache:
-            cache.write(original.read())
+    global cache_hash
+    cache_hash = get_hash()
 
 
 async def compare():
-    path = "/tmp/mdpreview.md"
-    cache_path = "/tmp/mdpreview.md.cache"
-    with open(path) as mod:
-        modified = mod.read()
-    with open(cache_path) as cache:
-        cached = cache.read()
-    return modified == cached
+    return get_hash() == cache_hash
 
 
 @app.websocket("/websocket")
@@ -78,7 +81,8 @@ async def websocket_endpoint(websocket: WebSocket):
         while running:
             if not await compare():
                 await websocket.send_json({"message": "reload"})
-            await asyncio.sleep(0.5)
+                update_cache()
+            await asyncio.sleep(0.2)
     except (WebSocketDisconnect, ConnectionClosedOK):
         pass
 
