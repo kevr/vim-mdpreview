@@ -46,18 +46,19 @@ All dependencies are public and available via `pip`.
 
     Plug 'kevr/vim-mdpreview', { 'do': './install.sh' }
 
-<small>**NOTE:** The `vim-plug` method installs `mdpreview` packages
-and binaries to `$HOME/.local`</small>
+With `vim-plug`, users do not need to do anything else. Just
+`:PlugInstall`, open a markdown file, run `:MarkdownPreview`
+and continue on to live previewing your vim markdown writes.
 
-### With `pip`
+### Otherwise
 
-To install `vim-mdpreview`, you must install the `mdpreview` Python
-package through `setup.py` or via `pip[3]` (including dependencies).
+Run `install.sh` to automate a bunch of environment variable
+configuration after installing pip to the local directory.
 
-    $ /usr/bin/pip3 install --user -I -r requirements.txt .
+It'll also install a systemd service to `$HOME/.config/systemd/user`
+which vim starts up for hot reload communication.
 
-<small>**Note:** Pay attention to use your system `python3` binary to
-avoid any virtualenv issues.</small>
+    $ ./install.sh
 
 Last but not least, put the ftplugin script in your `~/.vim`:
 
@@ -76,6 +77,11 @@ and `PORT` environment variables used by the `mdpreviewd` systemd service.
 Before the service can successfully start,
 [example/mdpreviewrc](example/mdpreviewrc) must be located at
 `$HOME/.mdpreviewrc`.
+
+
+**NOTE:** It is suggested that this configuration file is not changed
+other than the `PORT` variable. Installation through `vim-plug` and
+other means set the path information up for you.
 
 ## License
 
