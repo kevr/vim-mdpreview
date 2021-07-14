@@ -1,10 +1,21 @@
 import os
+import re
 import shutil
+from subprocess import PIPE, Popen
 
 from setuptools import setup
 
+
+def git_version():
+    proc = Popen(["git", "describe"], stdout=PIPE)
+    out, err = proc.communicate()
+    out = out.decode()
+    match = re.match(r'^(\d+\.\d+-\d+)(?:.*)?', out)
+    return match.group(1).replace("-", ".")
+
+
 setup(name="mdpreview",
-      version="1.0.0",
+      version=git_version(),
       description="VIM Markdown Preview HTTP server",
       author="Kevin Morris",
       author_email="kevr@0cost.org",
