@@ -16,11 +16,24 @@ if v:shell_error != 0
     echo "See `journalctl -u mpdreviewd -e` for logs."
 endif
 
+function! UpdatePreview()
+    let l:x = line(".")
+    let l:y = col(".")
+    let l:json = '{"x": ' . l:x . ', "y": ' . l:y . '}'
+    let l:content = join(getline(1, '$'), "\n")
+
+    " Update metadata.
+    call writefile(get(l:, "json"), glob("/tmp/mdpreview.json"), "b")
+
+    " Update content.
+    call writefile(split(get(l:, "content"), "\n", 1),
+        \ glob("/tmp/mdpreview.md"), "b")
+endfunction
+
 " After writing a file, copy it to /tmp/mdpreview.md.
 " This is then detected by mdpreviewd and triggers a websocket
 " load via Javascript on the rendered markdown page.
-autocmd BufWritePost *.md :call system(
-    \ "cp " . expand("%") . " /tmp/mdpreview.md")
+autocmd BufWritePost *.md :call UpdatePreview()
 
 " Spawn a preview browser tab using $BROWSER.
 " g:mdpreview_port configures the port used (default: '13337').

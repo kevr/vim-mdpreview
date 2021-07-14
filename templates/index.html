@@ -33,5 +33,14 @@
                 </a>
             </span>
         </div>
+
+        <script type="text/javascript">
+            function onload() {
+                window.scrollTo(0, {{ scrollTop }});
+                console.log("Scrolled to: " + {{ scrollTop }});
+            }
+            document.addEventListener("DOMContentLoaded", onload);
+        </script>
     </body>
+
 </html>

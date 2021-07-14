@@ -1,10 +1,11 @@
 import asyncio
 import hashlib
+import json
 import logging
 import os
 from http import HTTPStatus
 
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Query, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from websockets.exceptions import ConnectionClosedOK
@@ -13,6 +14,7 @@ from mdpreview.templates import render_template
 from mdpreview.util import share
 
 PATH = "/tmp/mdpreview.md".encode()
+METADATA_PATH = "/tmp/mdpreview.json"
 
 static = os.path.join(share, "static")
 
@@ -22,6 +24,17 @@ logger = logging.getLogger(__name__)
 cache_hash = ''
 
 running = True
+
+
+def get_metadata():
+    if os.path.exists(METADATA_PATH):
+        with open(METADATA_PATH) as fd:
+            return json.load(fd)
+    return {
+        # Default values.
+        "x": 0,
+        "y": 0
+    }
 
 
 @app.on_event("startup")
@@ -38,7 +51,7 @@ async def app_shutdown():
 
 
 @app.get("/")
-async def markdown(request: Request):
+async def markdown(request: Request, scrollTop: int = Query(default=0)):
     markdown_path = "/tmp/mdpreview.md"
     if not os.path.exists(markdown_path):
         return Response(status_code=int(HTTPStatus.NOT_FOUND))
@@ -50,8 +63,11 @@ async def markdown(request: Request):
         logger.error(str(exc))
         return Response(status_code=int(HTTPStatus.UNAUTHORIZED))
 
+    metadata = get_metadata()
+
     logger.debug("Loaded markdown.")
-    template = render_template("index.html", markdown=markdown)
+    template = render_template("index.html", markdown=markdown,
+                               scrollTop=scrollTop)
     return HTMLResponse(template)
 
 
@@ -80,7 +96,10 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while running:
             if not await compare():
-                await websocket.send_json({"message": "reload"})
+                metadata = get_metadata()
+                data = {"message": "reload"}
+                data.update(metadata)
+                await websocket.send_json(data)
                 update_cache()
             await asyncio.sleep(0.2)
     except (WebSocketDisconnect, ConnectionClosedOK):

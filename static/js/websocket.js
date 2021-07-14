@@ -29,7 +29,9 @@ function make_websocket() {
     console.log("Received websocket message: " + event.data);
     if (data.message === "reload") {
       console.log("Reloading!");
-      location.reload();
+      location.href = location.origin + location.pathname + "?scrollTop=" + (document.documentElement.scrollTop || document.body.scrollTop);
+      console.log(location.href);
+      // location.reload();
     }
   });
 
