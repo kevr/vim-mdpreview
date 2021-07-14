@@ -23,7 +23,7 @@ function! UpdatePreview()
     let l:content = join(getline(1, '$'), "\n")
 
     " Update metadata.
-    call writefile(get(l:, "json"), glob("/tmp/mdpreview.json"), "b")
+    call writefile([get(l:, "json")], glob("/tmp/mdpreview.json"), "b")
 
     " Update content.
     call writefile(split(get(l:, "content"), "\n", 1),
