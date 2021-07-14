@@ -1,17 +1,26 @@
 import os
 import re
 import shutil
+import sys
 from subprocess import PIPE, Popen
 
 from setuptools import setup
 
 
 def git_version():
-    proc = Popen(["git", "describe"], stdout=PIPE)
-    out, err = proc.communicate()
-    out = out.decode()
-    match = re.match(r'^(\d+\.\d+-\d+)(?:.*)?', out)
-    return match.group(1).replace("-", ".")
+    if os.path.exists(".git"):
+        proc = Popen(["git", "describe", "--long"], stdout=PIPE)
+        out, err = proc.communicate()
+        out = out.decode()
+        match = re.match(r'^(\d+\.\d+-\d+)(?:.*)?', out)
+        return match.group(1).replace("-", ".")
+    else:
+        if not os.path.exists(".tag"):
+            print("No .tag and not in a git repository. "
+                  "Cannot determine version.")
+            sys.exit(0)
+        with open(".tag") as f:
+            return f.read()
 
 
 setup(name="mdpreview",
