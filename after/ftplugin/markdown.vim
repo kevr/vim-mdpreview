@@ -17,13 +17,7 @@ if v:shell_error != 0
 endif
 
 function! UpdatePreview()
-    let l:x = line(".")
-    let l:y = col(".")
-    let l:json = '{"x": ' . l:x . ', "y": ' . l:y . '}'
     let l:content = join(getline(1, '$'), "\n")
-
-    " Update metadata.
-    call writefile([get(l:, "json")], glob("/tmp/mdpreview.json"), "b")
 
     " Update content.
     call writefile(split(get(l:, "content"), "\n", 1),
