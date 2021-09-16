@@ -4,17 +4,21 @@
 # for the user with paths pointing to this directory.
 set -eou pipefail
 
+rm -vf $HOME/.config/systemd/user/mdpreviewd.service
+
 /usr/bin/pip3 install -I --prefix "$(pwd)/lib" -r requirements.txt .
 
-sed -i "s|SCRIPT_PATH|$(pwd)/lib/bin|" \
+nvim_path="$HOME/.config/nvim/plugged/vim-mdpreview"
+pypath="$(find "$nvim_path/lib" -type d -name 'site-packages' | xargs)"
+
+sed -i "s|SCRIPT_PATH|$nvim_path/lib/bin|" \
     $HOME/.config/systemd/user/mdpreviewd.service
 
-pypath="$(find $(pwd)/lib -type d -name 'site-packages' | xargs)"
 cp -vf examples/mdpreviewrc $HOME/.mdpreviewrc
-sed -ri "s|^PYTHONPATH=.*$|PYTHONPATH=\"$pypath:$(pwd)\"|" $HOME/.mdpreviewrc
-sed -ri "s|^PATH=.*$|PATH=\"$(pwd)/lib/bin:$(pwd)/bin:\${PATH}\"|" \
+sed -ri "s|^PYTHONPATH=.*$|PYTHONPATH=\"$pypath:$nvim_path\"|" $HOME/.mdpreviewrc
+sed -ri "s|^PATH=.*$|PATH=\"$nvim_path/lib/bin:$nvim_path/bin:${PATH}|" \
     $HOME/.mdpreviewrc
-sed -ri "s|^MDPREVIEW_PATH=.*$|MDPREVIEW_PATH=\"$(pwd)\"|" $HOME/.mdpreviewrc
+sed -ri "s|^MDPREVIEW_PATH=.*$|MDPREVIEW_PATH=\"$nvim_path\"|" $HOME/.mdpreviewrc
 
 systemctl --user daemon-reload
 

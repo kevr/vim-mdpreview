@@ -63,8 +63,6 @@ async def markdown(request: Request, scrollTop: int = Query(default=0)):
         logger.error(str(exc))
         return Response(status_code=int(HTTPStatus.UNAUTHORIZED))
 
-    metadata = get_metadata()
-
     logger.debug("Loaded markdown.")
     template = render_template("index.html", markdown=markdown,
                                scrollTop=scrollTop)
