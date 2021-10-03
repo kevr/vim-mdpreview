@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from http import HTTPStatus
+from typing import List
 
 from fastapi import FastAPI, Query, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, Response
@@ -13,13 +14,14 @@ from websockets.exceptions import ConnectionClosedOK
 from mdpreview.templates import render_template
 from mdpreview.util import share
 
-PATH = "/tmp/mdpreview.md".encode()
-METADATA_PATH = "/tmp/mdpreview.json"
+HOME = os.environ.get("HOME", "/root")
+PATH = os.path.join(HOME, ".mdpreview.md")
+METADATA_PATH = os.path.join(HOME, ".mdpreview.json")
+STATIC = os.path.join(share, "static")
 
-static = os.path.join(share, "static")
+logger = logging.getLogger("uvicorn.error")
 
 app = FastAPI()
-logger = logging.getLogger(__name__)
 
 cache_hash = ''
 
@@ -40,7 +42,7 @@ def get_metadata():
 @app.on_event("startup")
 async def app_startup():
     global running
-    app.mount("/static", StaticFiles(directory=static), name="static")
+    app.mount("/static", StaticFiles(directory=STATIC), name="static")
     running = True
 
 
@@ -52,18 +54,17 @@ async def app_shutdown():
 
 @app.get("/")
 async def markdown(request: Request, scrollTop: int = Query(default=0)):
-    markdown_path = "/tmp/mdpreview.md"
-    if not os.path.exists(markdown_path):
+    if not os.path.exists(PATH):
         return Response(status_code=int(HTTPStatus.NOT_FOUND))
 
     try:
-        with open(markdown_path) as f:
+        with open(PATH) as f:
             markdown = f.read()
     except OSError as exc:
         logger.error(str(exc))
         return Response(status_code=int(HTTPStatus.UNAUTHORIZED))
 
-    logger.debug("Loaded markdown.")
+    logger.info("Loaded markdown.")
     template = render_template("index.html", markdown=markdown,
                                scrollTop=scrollTop)
     return HTMLResponse(template)
@@ -85,10 +86,32 @@ async def compare():
     return get_hash() == cache_hash
 
 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
+
+
 @app.websocket("/websocket")
 async def websocket_endpoint(websocket: WebSocket):
     global running
-    await websocket.accept()
+    await manager.connect(websocket)
     update_cache()
 
     try:
@@ -101,6 +124,4 @@ async def websocket_endpoint(websocket: WebSocket):
                 update_cache()
             await asyncio.sleep(0.2)
     except (WebSocketDisconnect, ConnectionClosedOK):
-        pass
-
-    await websocket.close()
+        manager.disconnect(websocket)

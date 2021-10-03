@@ -12,11 +12,11 @@
 
     <body>
         <article id="content" class="markdown-body"></article>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked@4.0.4/marked.min.js"></script>
         <script>
             function setMarkdown(text) {
                 let content = document.getElementById("content");
-                content.innerHTML = marked(text);
+                content.innerHTML = marked.parse(text);
             }
             setMarkdown("{{ markdown | replace('\\', '\\\\') | replace('\n', '\\n') | replace('\"', '\\\"') }}");
         </script>
