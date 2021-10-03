@@ -4,6 +4,8 @@
 # for the user with paths pointing to this directory.
 set -eou pipefail
 
+git pull origin --tags
+
 rm -vf $HOME/.config/systemd/user/mdpreviewd.service
 
 /usr/bin/pip3 install -I --prefix "$(pwd)/lib" -r requirements.txt .
