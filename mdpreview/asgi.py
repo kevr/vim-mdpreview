@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from http import HTTPStatus
+from typing import List
 
 from fastapi import FastAPI, Query, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, Response
@@ -85,10 +86,32 @@ async def compare():
     return get_hash() == cache_hash
 
 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
+
+
 @app.websocket("/websocket")
 async def websocket_endpoint(websocket: WebSocket):
     global running
-    await websocket.accept()
+    await manager.connect(websocket)
     update_cache()
 
     try:
@@ -101,6 +124,4 @@ async def websocket_endpoint(websocket: WebSocket):
                 update_cache()
             await asyncio.sleep(0.2)
     except (WebSocketDisconnect, ConnectionClosedOK):
-        pass
-
-    await websocket.close()
+        manager.disconnect(websocket)
