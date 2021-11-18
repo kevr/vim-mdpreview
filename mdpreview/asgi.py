@@ -14,8 +14,9 @@ from websockets.exceptions import ConnectionClosedOK
 from mdpreview.templates import render_template
 from mdpreview.util import share
 
-PATH = "/tmp/mdpreview.md".encode()
-METADATA_PATH = "/tmp/mdpreview.json"
+HOME = os.environ.get("HOME", "/root")
+PATH = os.path.join(HOME, ".mdpreview.md")
+METADATA_PATH = os.path.join(HOME, ".mdpreview.json")
 
 static = os.path.join(share, "static")
 
@@ -53,12 +54,11 @@ async def app_shutdown():
 
 @app.get("/")
 async def markdown(request: Request, scrollTop: int = Query(default=0)):
-    markdown_path = "/tmp/mdpreview.md"
-    if not os.path.exists(markdown_path):
+    if not os.path.exists(PATH):
         return Response(status_code=int(HTTPStatus.NOT_FOUND))
 
     try:
-        with open(markdown_path) as f:
+        with open(PATH) as f:
             markdown = f.read()
     except OSError as exc:
         logger.error(str(exc))
