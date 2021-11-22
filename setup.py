@@ -30,7 +30,10 @@ setup(name="mdpreview",
       author_email="kevr@0cost.org",
       url="https://www.github.com/kevr/mdpreview",
       packages=['mdpreview'],
-      scripts=['bin/mdpreviewd'])
+      scripts=['bin/mdpreviewd'],
+      install_requires=[
+          "typing-extensions==3.*,>=3.6.0"
+      ])
 
 home = os.environ.get("HOME")
 
