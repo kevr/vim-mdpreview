@@ -4,7 +4,7 @@
 # for the user with paths pointing to this directory.
 CONFIG="$HOME/.mdpreviewrc"
 
-git pull origin --tags
+git fetch origin --tags
 
 rm -vf $HOME/.config/systemd/user/mdpreviewd.service
 rm -vf $CONFIG
@@ -24,5 +24,6 @@ sed -ri "s|^PATH=.*$|PATH=\"$nvim_path/lib/bin:$nvim_path/bin:${PATH}|" \
 sed -ri "s|^MDPREVIEW_PATH=.*$|MDPREVIEW_PATH=\"$nvim_path\"|" $HOME/.mdpreviewrc
 
 systemctl --user daemon-reload
+systemctl --user restart mdpreviewd
 
 echo "Done! Have fun!"
