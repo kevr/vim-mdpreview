@@ -12,7 +12,7 @@ def git_version():
         proc = Popen(["git", "describe", "--long"], stdout=PIPE)
         out, err = proc.communicate()
         out = out.decode()
-        match = re.match(r'^(\d+\.\d+-\d+)(?:.*)?', out)
+        match = re.match(r'^(\d+\.\d+[-.]\d+)(?:.*)?', out)
         return match.group(1).replace("-", ".")
     else:
         if not os.path.exists(".tag"):
