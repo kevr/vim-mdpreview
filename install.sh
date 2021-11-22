@@ -19,7 +19,7 @@ sed -i "s|SCRIPT_PATH|$nvim_path/lib/bin|" \
 
 cp -vf examples/mdpreviewrc $CONFIG
 sed -ri "s|^PYTHONPATH=.*$|PYTHONPATH=\"$pypath:$nvim_path\"|" $HOME/.mdpreviewrc
-sed -ri "s|^PATH=.*$|PATH=\"$nvim_path/lib/bin:$nvim_path/bin:${PATH}|" \
+sed -ri "s|^PATH=.*$|PATH=\"$nvim_path/lib/bin:$nvim_path/bin:${PATH}\"|" \
     $HOME/.mdpreviewrc
 sed -ri "s|^MDPREVIEW_PATH=.*$|MDPREVIEW_PATH=\"$nvim_path\"|" $HOME/.mdpreviewrc
 
