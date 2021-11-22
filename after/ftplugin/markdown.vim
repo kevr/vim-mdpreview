@@ -21,7 +21,7 @@ function! UpdatePreview()
 
     " Update content.
     call writefile(split(get(l:, "content"), "\n", 1),
-        \ glob("~/.mdpreview.md"), "b")
+        \ getenv("HOME") . "/.mdpreview.md", "b")
 endfunction
 
 " After writing a file, copy it to /tmp/mdpreview.md.
