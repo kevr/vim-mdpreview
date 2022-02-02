@@ -3,7 +3,7 @@ from subprocess import PIPE, Popen
 
 from setuptools import setup
 
-VERSION = "0.4.7"
+VERSION = "0.4.8"
 
 
 def git_version():
