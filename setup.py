@@ -1,26 +1,19 @@
-import os
 import re
-import shutil
-import sys
 from subprocess import PIPE, Popen
 
 from setuptools import setup
 
+VERSION = "0.4.7"
+
 
 def git_version():
-    if os.path.exists(".git"):
-        proc = Popen(["git", "describe", "--long"], stdout=PIPE)
-        out, err = proc.communicate()
-        out = out.decode()
-        match = re.match(r'^(\d+\.\d+[-.]\d+)(?:.*)?', out)
-        return match.group(1).replace("-", ".")
-    else:
-        if not os.path.exists(".tag"):
-            print("No .tag and not in a git repository. "
-                  "Cannot determine version.")
-            sys.exit(0)
-        with open(".tag") as f:
-            return f.read()
+    proc = Popen(["git", "describe", "--long"], stdout=PIPE)
+    out, err = proc.communicate()
+    out = out.decode()
+    if proc.returncode != 0:
+        return VERSION
+    match = re.match(r'^(\d+\.\d+[-.]\d+)(?:.*)?', out)
+    return match.group(1).replace("-", ".")
 
 
 setup(name="mdpreview",
