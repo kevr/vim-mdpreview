@@ -2,12 +2,12 @@
 # variables which are to be sourced in the systemd user service.
 
 # Include $project/bin and $home/.local/bin in $PATH.
-PATH="${HOME}/.local/bin:${PATH}"
-PYTHONPATH="set me"
+PATH="%PATH%"
+PYTHONPATH="%PYTHONPATH%"
 
 # Listen on port 13337.
 # In vim, let g:mdpreview_port = 13337.
 PORT=13337
 
-MDPREVIEW_PATH="set me"
+MDPREVIEW_PATH="%MDPREVIEW_PATH%"
 

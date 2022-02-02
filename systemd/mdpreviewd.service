@@ -5,7 +5,7 @@ Description=VIM Markdown Preview HTTP server
 # ~/.mpreviewdrc must contain PORT=, PYTHONPATH=/path/to/vim-mpreview and
 # PATH="${PATH}:/path/to/vim-mpreview/bin".
 EnvironmentFile=%h/.mdpreviewrc
-ExecStart=SCRIPT_PATH/mdpreviewd
+ExecStart=%SCRIPT_PATH%/mdpreviewd
 TimeoutSec=1
 
 [Install]
